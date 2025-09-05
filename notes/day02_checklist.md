@@ -1,8 +1,2 @@
-# Day 2 Checklist — Repo skeleton + Safety plan
-
-- [ ] Create folders: `/hardware`, `/software`, `/notes`, `/cad`, `/docs`, `/scripts`
-- [ ] Add `safety.md` (read & commit)
-- [ ] Add `README.md` with repo structure and milestones
-- [ ] Capture bench photos (PSU, E‑Stop, fuse, XT60) and put in `hardware/`
-- [ ] Write wiring plan in `hardware/wiring_plan.md`
-- [ ] Commit & push to GitHub
+Day 1 Notes: Downloaded CCS and nessecary motor lab software. Ordered materials including fuses and fuse holder, e-stop, 12 awg silicon wiring, xt60 connectors, 4mm bullet connectors, cable zipties, heat shrink tubing, M3 standoff kit, RoMuka button switch, BOOSTXL-DRV8320RS gate driver, LAUNCHXL-F280049C Launch Pad, and of course the D5065 Dual Shaft Motor (270kv). (This will not be all of the materials needed but it is a good start)
+Day 2 Notes: Created Github repository and got organized with files. Mapped out a basic schematic of the initial wiring system. Created a safely checklist for the power supply bench.
