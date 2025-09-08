@@ -1,3 +1,3 @@
 # docs/
 
-Write ups, system overviews, skills learned.
+Write ups, system overviews + diagrams, skills learned.
