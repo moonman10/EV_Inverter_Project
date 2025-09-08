@@ -1,0 +1,313 @@
+		 	 	 		  
+			  
+				  
+					
+
+**Using Code Composer Studio (CCS) — General Guide and CAN Transceiver Workflow**
+
+					
+
+This document explains everyday CCS usage and a practical workflow for working with a CAN transceiver. It avoids device-specific installation steps and focuses on actions you do repeatedly.
+
+					
+
+**1\. CCS at a Glance**
+
+					
+
+Workspaces hold projects. Each project builds to a specific device and connection. You typically switch between a build configuration for development (RAM/Debug) and one for final flashing (FLASH/Release). The Debug view is where you load, run, halt, and inspect your program on the target.
+
+					
+
+* 						 							  
+  Project Explorer: shows your projects and files.  
+   						  
+* 						 							  
+  Build actions: Clean and Build from the toolbar or Project menu.  
+   						  
+* 						 							  
+  Debug controls: Debug (load), Resume (run), Suspend (halt), Terminate (disconnect).  
+   						  
+* 						 							  
+  Views you will use: Variables/Expressions (watch values), Registers, Memory Browser, Console.  
+   							  
+  **2\. Common Tasks You Will Do Often**  
+   						
+
+					 					
+
+* 						 							  
+  Open an existing project: File → Open Projects from File System or Import → CCS Projects. Keep the project inside your workspace for easy editing.  
+   						  
+* 						 							  
+  Choose build configuration: Project → Build Configurations → Set Active → Debug (RAM) for iteration, Release (FLASH) for standalone runs.  
+   						  
+* 						 							  
+  Build: Project → Build Project. Clean if you need a full rebuild.  
+   						  
+* 						 							  
+  Edit compiler and linker settings: Project → Properties → Build. Match the device, runtime library, and  
+   							  
+  any preprocessor symbols your code expects.  
+   						  
+* 						 							  
+  Debug and flash: Click the bug icon. CCS connects, loads the program, and halts at main. Click Resume to run. Terminate ends the session.  
+   						  
+* 						 							  
+  Reload after a code change: Terminate, then click Debug again to rebuild, reload, and run.  
+   						  
+* 						 							  
+  Set and manage breakpoints: click the gutter next to a line of code. Right-click to add conditions or hit counts.  
+   						  
+* 						 							  
+  Watch variables live: Window → Show View → Expressions. Add variables or addresses. Enable continuous refresh if needed.  
+   						  
+* 						 							  
+  Run from RAM vs FLASH: RAM builds are fast to iterate. FLASH builds boot without the debugger attached. Choose the correct linker command file for each.  
+   							  
+  **3\. Programming Without a Debug Session**  
+   							  
+  If you only need to load a finalized image, use Target Configurations to connect, then Tools → On-Chip Flash (or the program-load action provided by CCS for your device). Select the FLASH build output and program it. Disconnect when finished.  
+   							  
+  **4\. Console I/O and Basic Logging**  
+   						
+
+					 				  
+			  
+		  
+		  
+			  
+				  
+					
+
+For printf-style logs, many boards expose a virtual COM port through the on-board debugger. Open a serial terminal at the baud rate used in your firmware. You can keep CCS attached for debugging while a separate terminal shows serial output.
+
+					
+
+**5\. Version Control Hygiene with CCS**
+
+					
+
+* 						 							  
+  Commit source and project files (.c/.h, .cmd, .project, .ccsproject).  
+   						  
+* 						 							  
+  Do not commit build output: Debug/, Release/, .metadata/.  
+   						  
+* 						 							  
+  Keep a short README in your project folder that states device, connection, and any noteworthy build options.  
+   							  
+  **6\. Troubleshooting Essentials**  
+   						
+
+					 					
+
+* 						 							  
+  Target connection fails: unplug/plug USB, power-cycle the board, close other debug sessions, verify the correct target configuration (probe and device).  
+   						  
+* 						 							  
+  Program loads but doesn’t run: check you built the RAM vs FLASH image you think you did; verify reset/run settings and boot mode jumpers if applicable.  
+   						  
+* 						 							  
+  Symbols look wrong: clean and rebuild; ensure the active configuration matches the binary you loaded.  
+   							  
+  **7\. CCS with a CAN Transceiver — Practical Workflow**  
+   							  
+  This section focuses on the bench workflow that makes CAN reliable during development: wiring, bit-rate agreement, and a step-by-step bring-rup plan. The ideas apply to many MCUs and transceivers.  
+   							  
+  **7.1 Hardware overview**  
+   						
+
+					 					
+
+* 						 							  
+  MCU CAN module pins (TX and RX) connect to a CAN transceiver’s logic pins (often labeled TXD and RXD).  
+   						  
+* 						 							  
+  The transceiver drives the bus lines CANH and CANL on a twisted pair.  
+   						  
+* 						 							  
+  Termination is 120 Ω between CANH and CANL at each physical end of the bus (two total).  
+   						  
+* 						 							  
+  A short ground reference wire between nodes helps on a bench with separate power supplies.  
+   							  
+  **7.2 Typical connections**  
+   						
+
+					 				  
+			  
+			  
+				  
+					  
+MCU TX  
+MCU RX  
+3.3 V  
+GND
+
+				  
+				  
+					
+
+→ Transceiver TXD (D)  
+ ← Transceiver RXD (R)  
+ → Transceiver VCC (decouple with 0.1 μF to GND near the chip) → Transceiver GND
+
+				  
+			  
+			  
+				  
+					
+
+Transceiver CANH → Twisted pair → USB-to-CAN CANH  
+ Transceiver CANL → Twisted pair → USB-to-CAN CANL  
+ \[120 Ω\] across CANH↔CANL at your board end  
+ \[120 Ω\] at the USB-to-CAN end (many adapters have a switchable terminator) GND (optional short lead) between your board and the USB-to-CAN
+
+					
+
+**7.3 Bit rate and sample point**
+
+					
+
+All nodes on the bus must agree on bit rate (for example, 500 kbit/s). Choose a sample point around 75–80%. Keep the transceiver’s slope-control or standby pin in normal mode during testing.
+
+				  
+			  
+		  
+		  
+			  
+				  
+					
+
+**7.4 Bring**■**up plan (repeatable)**
+
+				  
+			  
+			  
+				  
+					
+
+* 						 							  
+  Power only the logic side and verify that the transceiver VCC is at the expected voltage.  
+   						  
+* 						 							  
+  Check continuity: CANH↔CANL should measure about 60 Ω with power off (two 120 Ω terminators in parallel).  
+   						  
+* 						 							  
+  Start with a single CAN frame transmitter (your MCU) and a receiver (USB-to-CAN). Keep wiring short.  
+   						  
+* 						 							  
+  Configure both sides to the same bit rate. Confirm the USB-to-CAN shows frames without errors.  
+   						  
+* 						 							  
+  Add reception on the MCU side. Verify that the receive interrupt or polling path sees frames sent from  
+   							  
+  the PC.  
+   						  
+* 						 							  
+  Exercise error paths: remove one terminator temporarily, or change bit rate on one end, and watch error counters increment. Restore correct settings.  
+   							  
+  **7.5 Minimal transmit and receive sketch (generic C)**  
+   							  
+  This is a device-agnostic outline to visualize the flow. Use your vendor driver or register layer to set the bit rate and enable TX/RX.  
+   						
+
+					 				  
+			  
+			  
+				  
+					  
+// Pseudocode outline  
+can\_reset();  
+can\_set\_bitrate(500000);  
+can\_set\_sample\_point(80);  
+can\_enable();
+
+				  
+				  
+					
+
+// match the USB-to-CAN tool // typical
+
+				  
+			  
+			  
+				  
+					
+
+// Transmit an 8-byte data frame with ID 0x100 frame.id \= 0x100;  
+ frame.dlc \= 8;  
+ memcpy(frame.data, some\_bytes, 8); can\_send(\&frame);
+
+					  
+ // Poll or ISR to receive  
+  if (can\_rx\_pending()) {
+
+					  
+     can\_recv(\&rx);  
+      // process rx.id, rx.dlc, rx.data\[\]
+
+					
+
+}
+
+					
+
+**7.6 USB**\-**to**\-**CAN adapter notes**
+
+					
+
+* 						 							  
+  Set the adapter to the same bit rate as the MCU. Many tools show a green indicator when the bus is  
+   							  
+  healthy.  
+   						  
+* 						 							  
+  Enable or disable the adapter’s 120 Ω terminator as needed so the total is two. Measure 60 Ω across H–L to confirm.  
+   						  
+* 						 							  
+  Log frames to a CSV while you test. Keep a short test script so you can replay the same traffic after code changes.  
+   							  
+  **7.7 Troubleshooting CAN quickly**  
+   						
+
+					 					
+
+• No frames seen anywhere: check RS/standby pin is in normal mode; confirm VCC and grounds; verify bit rate on both ends.
+
+				  
+			  
+		  
+		  
+			  
+				  
+					
+
+* 						 							  
+  Lots of errors: add the missing terminator; shorten wiring; add the ground reference wire between nodes.  
+   						  
+* 						 							  
+  Frames show but MCU never receives: verify RX pinmux and acceptance filters; confirm interrupts are enabled.  
+   						  
+* 						 							  
+  Bus locks up when attaching a second node: mismatched bit rates or three terminators present (measure H–L ≈ 40 Ω).  
+   							  
+  **8\. Habit Checklist**  
+   						
+
+					 					
+
+* 						 							  
+  Use Debug for load-run-inspect; Terminate to cleanly detach; rebuild and Debug again after changes.  
+   						  
+* 						 							  
+  Keep build configurations clear: RAM for iteration, FLASH for standalone.  
+   						  
+* 						 							  
+  On CAN, always match bit rate, verify two terminators, and keep the ground reference on the bench.   
+   						
+
+					 				  
+			  
+		  
