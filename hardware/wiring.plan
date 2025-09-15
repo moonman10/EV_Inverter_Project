@@ -1,0 +1,4 @@
+## Logic E-Stop (Day 1 decision)
+- Source → [NC E-Stop] → **J1-3 Enable**.
+- **10 kΩ** from J1-3 (Enable) → **J1-2 GND** (ensures open = LOW = disabled).
+- Source today = MCU GPIO (active HIGH). Software will also disable PWM on E-Stop.
