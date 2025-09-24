@@ -6,5 +6,5 @@ Hardware: https://github.com/moonman10/EV_Inverter_Project/tree/main/hardware
 Software: https://github.com/moonman10/EV_Inverter_Project/tree/main/software
 Scripts: https://github.com/moonman10/EV_Inverter_Project/tree/main/scripts
 Cad: https://github.com/moonman10/EV_Inverter_Project/tree/main/cad
-Docs:
+Docs: https://github.com/moonman10/EV_Inverter_Project/tree/main/docs
 Safety:
