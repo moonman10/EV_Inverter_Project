@@ -1,0 +1,92 @@
+# Complex Test Session — YYYY-MM-DD_label
+
+## Setup (quick)
+- Build: RAM / FLASH   | Commit: __________
+- PSU: 24 V, current limit ____ A   | Fan: on / off   | Ambient: ____ °C
+- Interlocks: E-Stop OK ☐  Enable logic OK ☐  Two CAN terminators ☐
+- Notes:
+
+---
+
+## 1) ADC scaling & zero-cal
+- Vbus (DMM / ADC): ____ V / ____ V   → Scale error: ____ %
+- Current offsets (Ia/Ib/Ic): ____ / ____ / ____ A   | Board temp: ____ °C
+- Pass gates: |scale| ≤ 5% ☐   |offsets| ≤ 0.05 A ☐
+- Notes:
+
+---
+
+## 2) eQEP / encoder validation
+- CPR configured: ____   | Index seen: yes / no   | Direction OK: yes / no
+- Counts delta (small forward/back turn): +____ / −____
+- Hand-turn RPM (approx): ____ rpm
+- Pass gates: index once/rev ☐   monotonic counts ☐
+- Notes:
+
+---
+
+## 3) PWM timing & deadtime (MCU pins / safe TPs)
+- PWM frequency: ____ kHz   | Deadtime: ____ ns
+- Complementary alignment notes:
+- Pass gates: freq target met ☐   deadtime ≥ 250 ns ☐
+- Notes:
+
+---
+
+## 4) FOC current loop (Iq step)
+- Command: Iq 0 → ____ A → 0
+- Iq overshoot: ____ %   | 2% settle: ____ ms   | Id during step: ____ A
+- Pass gates: overshoot ≤ 20% ☐   settle ≤ 50 ms ☐   |Id| ≤ 0.3 A ☐
+- Notes:
+
+---
+
+## 5) Speed loop
+- Step: 0 → ____ rpm → 0   | iq_peak: ____ A
+- Overshoot: ____ %   | Settle: ____ s
+- Pass gates: overshoot ≤ 10% ☐   settle ≤ 0.5 s ☐   current limit respected ☐
+- Notes:
+
+---
+
+## 6) Regen clamp (brake chopper)
+- Thresholds: ON ____ V / OFF ____ V   | Vbus peak: ____ V
+- Chopper behavior: clean hysteresis yes / no   | Resistor temp: ____ °C
+- Pass gates: no chatter ☐   temp < 80 °C ☐
+- Notes:
+
+---
+
+## 7) CAN telemetry & bus health
+- Bitrate: ____ kbit/s   | TX rate: ____ Hz   | Error frames (60 s): ____
+- CSV saved to: ______________________
+- Pass gates: zero errors ☐   expected rate ☐
+- Notes:
+
+---
+
+## 8) FLASH boot & startup gating
+- Boot OK without debugger: yes / no   | Time to ready: ____ s
+- PWM inhibited until Enable & checks: yes / no
+- Pass gates: no unintended spin ☐
+- Notes:
+
+---
+
+## 9) Reliability (optional today)
+- Run time: ____ min   | FET temp: ____ °C   | Brake R temp: ____ °C
+- E-Stop during motion: stop time ____ ms   | Fault count: ____
+- Pass gates: temps stable ☐   no persistent faults ☐
+- Notes:
+
+---
+
+## Artifacts
+- Telemetry CSV: ______________________
+- Photos / scope shots: ______________________
+- Plots generated: ______________________
+
+## Next actions (one-liners)
+- [ ] ______________________________________
+- [ ] ______________________________________
+
