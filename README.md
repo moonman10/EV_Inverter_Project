@@ -3,7 +3,7 @@ Low-voltage 3-phase inverter (TI F280049C + DRV8320RS) with FOC, regen, and safe
 Table of contents:
 Notes: https://github.com/moonman10/EV_Inverter_Project/tree/main/notes
 Hardware: https://github.com/moonman10/EV_Inverter_Project/tree/main/hardware
-Software:
+Software: https://github.com/moonman10/EV_Inverter_Project/tree/main/software
 Scripts:
 Cad:
 Docs:
